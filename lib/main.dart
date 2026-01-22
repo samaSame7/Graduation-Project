@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'ui/screens/splash_screen/splash.dart';
+import 'ui/screens/splash_screen/splash_screen.dart';
 import 'ui/screens/booking_screen/booking_screen.dart';
-import 'ui/screens/onboarding_screen/onboarding.dart';
+import 'ui/screens/onboarding_screen/onboarding_screen.dart';
 import 'ui/screens/ticket_screen/ticket_screen.dart';
-import 'ui/screens/common_questions_screen/common_questions.dart';
+import 'ui/screens/common_questions_screen/common_questions_screen.dart';
 import 'ui/screens/main_screen/main_screen.dart';
 import 'ui/screens/service_requirement_screen/service_requirement_screen.dart';
 import 'ui/screens/thanks_screen/thanks_screen.dart';
@@ -34,7 +34,7 @@ class _MyAppState extends State<MyApp> {
         TicketScreen.routeName: (context) => const TicketScreen(),
         ThanksScreen.routeName: (context) => const ThanksScreen(),
       },
-      home: const OnboardingScreen(),
+      home: const SplashScreen(),
     );
   }
 }

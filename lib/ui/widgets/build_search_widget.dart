@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import '../utils/app_colors.dart';
-import '../utils/app_styles.dart'; // 1. تأكد من وجود هذا الاستيراد
+import '../utils/app_styles.dart';
 
 class BuildSearchWidget extends StatelessWidget {
   const BuildSearchWidget({
     super.key,
-    required this.onChanged, // 2. استقبال دالة التغيير
+    required this.onChanged,
   });
 
   final ValueChanged<String> onChanged;
@@ -27,11 +27,11 @@ class BuildSearchWidget extends StatelessWidget {
               Expanded(
                 child: TextField(
                   cursorColor: AppColors.white,
-                  onChanged: onChanged, // 3. ربط التغيير بالدالة الممررة
-                  style: AppStyles.white15regular,
+                  onChanged: onChanged,
+                  style: AppStyles.white16regular,
                   decoration: const InputDecoration(
                     hintText: 'بحث',
-                    hintStyle: AppStyles.white15regular,
+                    hintStyle: AppStyles.white20regular,
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(
                         horizontal: 12, vertical: 8),

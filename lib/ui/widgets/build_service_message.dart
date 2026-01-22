@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../utils/app_colors.dart'; // تأكد أن المسار صحيح
-import '../utils/app_styles.dart'; // تأكد أن المسار صحيح
+import '../utils/app_colors.dart';
+import '../utils/app_styles.dart';
 import 'faq_dm.dart';
 
 class BuildServiceWidget extends StatelessWidget {
@@ -9,11 +9,9 @@ class BuildServiceWidget extends StatelessWidget {
     required this.item,
     required this.isOpen,
     required this.onExpansionChanged,
-    //required this.title,
   });
 
   final FaqDm item;
-  //final String title;
   final bool isOpen;
   final Function(bool) onExpansionChanged;
 
@@ -49,7 +47,7 @@ class BuildServiceWidget extends StatelessWidget {
           title: Text(
             item.title,
             textAlign: TextAlign.right,
-            style: AppStyles.blue24regular,
+            style: AppStyles.blue26regular,
           ),
           trailing: Icon(
             isOpen

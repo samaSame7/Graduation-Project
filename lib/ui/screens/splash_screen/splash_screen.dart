@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../utils/app_assets.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_styles.dart';
-import '../onboarding_screen/onboarding.dart';
+import '../onboarding_screen/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

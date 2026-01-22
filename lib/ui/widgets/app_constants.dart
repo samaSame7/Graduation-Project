@@ -34,15 +34,15 @@ abstract final class AppConstants {
   static final List<Map<String, String>> pages = [
     {
       "image": AppAssets.slide1Img,
-      "desc": "",
+      "desc": "منظومة مبتكرة لتيسير خدمة الطالب",
     },
     {
       "image": AppAssets.slide2Img,
-      "desc": "We Are Very Excited To Have You In Our Community",
+      "desc": "إنتظار أقل ... خدمة أسرع",
     },
     {
       "image": AppAssets.slide3Img,
-      "desc": "Read, and your Lord is the Most Generous",
+      "desc": "منصة إدارة خدمات الطلاب",
     },
   ];
 }

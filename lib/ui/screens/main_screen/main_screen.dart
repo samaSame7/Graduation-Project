@@ -4,7 +4,7 @@ import '../../utils/app_colors.dart';
 import '../../utils/app_styles.dart';
 import '../../widgets/app_button.dart';
 import '../booking_screen/booking_screen.dart';
-import '../common_questions_screen/common_questions.dart';
+import '../common_questions_screen/common_questions_screen.dart';
 import '../service_requirement_screen/service_requirement_screen.dart';
 
 class MainScreen extends StatelessWidget {
