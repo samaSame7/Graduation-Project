@@ -1,0 +1,50 @@
+import 'package:flutter/material.dart';
+import '../../utils/app_colors.dart';
+import '../../utils/app_styles.dart';
+
+class BuildCustomerStatus extends StatelessWidget {
+  const BuildCustomerStatus({super.key, required this.decoration});
+  final BoxDecoration decoration;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+      decoration: decoration,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 15),
+            decoration: BoxDecoration(
+              color: AppColors.gray,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Text(
+              "في الإنتظار",
+              style: AppStyles.blue16regular,
+            ),
+          ),
+          const Row(
+            children: [
+              Text.rich(
+                TextSpan(
+                  text: "الحالة",
+                  style: AppStyles.blue16regular,
+                  children: [
+                    TextSpan(
+                      text: ":\u200F",
+                      style: AppStyles.blue16regular,
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(width: 8),
+              Icon(Icons.edit, color: AppColors.darkBlue),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
