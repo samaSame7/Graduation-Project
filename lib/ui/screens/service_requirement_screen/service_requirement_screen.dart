@@ -4,7 +4,7 @@ import '../../utils/app_colors.dart';
 import '../../utils/app_styles.dart';
 import '../../widgets/build_search_widget.dart';
 import '../../widgets/build_service_message.dart';
-import '../../widgets/faq_dm.dart';
+import '../../../data/models/faq_dm.dart';
 import '../../../data/service_requirements_api_service.dart';
 
 class ServiceRequirementScreen extends StatefulWidget {
@@ -16,13 +16,11 @@ class ServiceRequirementScreen extends StatefulWidget {
       _ServiceRequirementScreenState();
 }
 
-class _ServiceRequirementScreenState
-    extends State<ServiceRequirementScreen> {
-  int? _openId;
+class _ServiceRequirementScreenState extends State<ServiceRequirementScreen> {
+  String? _openId;
   String _search = "";
 
-  final ServiceRequirementsApiService _api =
-      ServiceRequirementsApiService();
+  final ServiceRequirementsApiService _api = ServiceRequirementsApiService();
 
   late Future<List<FaqDm>> _future;
 
@@ -82,10 +80,8 @@ class _ServiceRequirementScreenState
                   child: FutureBuilder<List<FaqDm>>(
                     future: _future,
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return const Center(
-                            child: CircularProgressIndicator());
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
                       }
 
                       if (snapshot.hasError) {
@@ -117,8 +113,7 @@ class _ServiceRequirementScreenState
                             isOpen: isOpen,
                             onExpansionChanged: (expanded) {
                               setState(() {
-                                _openId =
-                                    expanded ? item.id : null;
+                                _openId = expanded ? item.id : null;
                               });
                             },
                           );

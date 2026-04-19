@@ -51,10 +51,7 @@ class BuildDropdownButton extends StatelessWidget {
                       child: Text(
                         e,
                         textAlign: TextAlign.right,
-                        style: const TextStyle(
-                          color: AppColors.darkBlue,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: AppStyles.blue16regular,
                       ),
                     ),
                   );

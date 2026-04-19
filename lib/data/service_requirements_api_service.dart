@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../core/config/app_config.dart';
-import '../ui/widgets/faq_dm.dart';
+import 'models/faq_dm.dart';
 
 class ServiceRequirementsApiService {
   final String baseUrl;
@@ -68,7 +68,7 @@ class ServiceRequirementsApiService {
         : requirements.map((e) => '• $e').join('\n');
 
     return FaqDm(
-      id: idStr.hashCode,
+      id: idStr,
       title: name,
       content: content,
     );

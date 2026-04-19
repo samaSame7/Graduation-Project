@@ -3,6 +3,9 @@ import '../../utils/app_assets.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_styles.dart';
 import '../../widgets/app_button.dart';
+import '../../../data/models/faq_dm.dart';
+import '../../../data/service_requirements_api_service.dart';
+import '../../../data/ticket_api_service.dart';
 import '../ticket_screen/ticket_screen.dart';
 import 'build_dropdown_button.dart';
 import 'build_role_button.dart';
@@ -17,14 +20,36 @@ class BookingScreen extends StatefulWidget {
 
 class _BookingScreenState extends State<BookingScreen> {
   String selectedRole = "طالب";
-  String? selectedService;
+  FaqDm? _selectedServiceObject;
+  bool _isLoading = false;
 
-  final List<String> services = [
-    "استخراج شهادة",
-    "توثيق ورقي",
-    "استعلام",
-    "أخرى",
-  ];
+  List<FaqDm> _apiServices = [];
+  final ServiceRequirementsApiService _serviceApi =
+      ServiceRequirementsApiService();
+  final TicketApiService _ticketApi = TicketApiService();
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchServices();
+  }
+
+  Future<void> _fetchServices() async {
+    try {
+      final services = await _serviceApi.fetchServiceRequirements();
+      if (mounted) {
+        setState(() {
+          _apiServices = services;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("حدث خطأ أثناء تحميل الخدمات")),
+        );
+      }
+    }
+  }
 
   void _changeRole(String newRole) {
     setState(() {
@@ -95,15 +120,18 @@ class _BookingScreenState extends State<BookingScreen> {
                   style: AppStyles.blue26regular,
                 ),
                 const SizedBox(height: 8),
-                BuildDropdownButton(
-                  items: services,
-                  selectedService: selectedService,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedService = newValue;
-                    });
-                  },
-                ),
+                _apiServices.isEmpty
+                    ? const Center(child: CircularProgressIndicator())
+                    : BuildDropdownButton(
+                        items: _apiServices.map((e) => e.title).toList(),
+                        selectedService: _selectedServiceObject?.title,
+                        onChanged: (newValue) {
+                          setState(() {
+                            _selectedServiceObject = _apiServices.firstWhere(
+                                (element) => element.title == newValue);
+                          });
+                        },
+                      ),
                 const SizedBox(height: 40),
                 Expanded(
                   child: Image.asset(
@@ -113,8 +141,8 @@ class _BookingScreenState extends State<BookingScreen> {
                 ),
                 const SizedBox(height: 20),
                 AppButton(
-                  onPress: () {
-                    if (selectedService == null) {
+                  onPress: () async {
+                    if (_selectedServiceObject == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text(
@@ -126,9 +154,36 @@ class _BookingScreenState extends State<BookingScreen> {
                       );
                       return;
                     }
-                    Navigator.pushNamed(context, TicketScreen.routeName);
+
+                    setState(() => _isLoading = true);
+
+                    try {
+                      final ticket = await _ticketApi.createTicket(
+                        roleTitle: selectedRole,
+                        serviceId: _selectedServiceObject!.id,
+                      );
+
+                      if (mounted) {
+                        setState(() => _isLoading = false);
+                        Navigator.pushNamed(context, TicketScreen.routeName,
+                            arguments: ticket);
+                      }
+                    } catch (e) {
+                      if (mounted) {
+                        setState(() => _isLoading = false);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "فشل الحجز: يرجى المحاولة مرة أخرى",
+                              style: AppStyles.white20regular,
+                            ),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    }
                   },
-                  text: 'تأكيد الحجز',
+                  text: _isLoading ? 'جاري الحجز...' : 'تأكيد الحجز',
                   foreColor: AppColors.white,
                   bkColor: AppColors.blue,
                 ),

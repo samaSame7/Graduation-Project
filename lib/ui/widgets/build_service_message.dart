@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_styles.dart';
-import 'faq_dm.dart';
+import '../../data/models/faq_dm.dart';
 
 class BuildServiceWidget extends StatelessWidget {
   const BuildServiceWidget({

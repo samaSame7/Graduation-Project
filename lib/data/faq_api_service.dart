@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../core/config/app_config.dart';
-import '../ui/widgets/faq_dm.dart';
+import 'models/faq_dm.dart';
 
 class FaqApiService {
   final String baseUrl;
@@ -66,7 +66,7 @@ class FaqApiService {
     final content = (json['answer'] ?? '').toString();
 
     return FaqDm(
-      id: idStr.hashCode,
+      id: idStr,
       title: title,
       content: content,
     );
