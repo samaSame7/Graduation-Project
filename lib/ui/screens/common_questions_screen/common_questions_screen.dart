@@ -5,7 +5,7 @@ import '../../utils/app_colors.dart';
 import '../../utils/app_styles.dart';
 import '../../widgets/build_search_widget.dart';
 import '../../widgets/build_service_message.dart';
-import '../../widgets/faq_dm.dart';
+import '../../../data/models/faq_dm.dart';
 import '../../../data/faq_api_service.dart';
 
 class FaqScreen extends StatefulWidget {
@@ -17,7 +17,7 @@ class FaqScreen extends StatefulWidget {
 }
 
 class _FaqScreenState extends State<FaqScreen> {
-  int? _openId;
+  String? _openId;
   String _search = "";
   Timer? _debounce;
 
@@ -83,10 +83,8 @@ class _FaqScreenState extends State<FaqScreen> {
                   child: FutureBuilder<List<FaqDm>>(
                     future: _future,
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return const Center(
-                            child: CircularProgressIndicator());
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
                       }
 
                       if (snapshot.hasError) {
@@ -111,8 +109,7 @@ class _FaqScreenState extends State<FaqScreen> {
                             isOpen: isOpen,
                             onExpansionChanged: (expanded) {
                               setState(() {
-                                _openId =
-                                    expanded ? item.id : null;
+                                _openId = expanded ? item.id : null;
                               });
                             },
                           );

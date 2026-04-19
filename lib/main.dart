@@ -34,7 +34,7 @@ class _MyAppState extends State<MyApp> {
         TicketScreen.routeName: (context) => const TicketScreen(),
         ThanksScreen.routeName: (context) => const ThanksScreen(),
       },
-      home: const SplashScreen(),
+      home: const OnboardingScreen(),
     );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../widgets/app_constants.dart';
+import '../../utils/app_constants.dart';
 
 class PageviewBuilder extends StatelessWidget {
   final PageController pageController;

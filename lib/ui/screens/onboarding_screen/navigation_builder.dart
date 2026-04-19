@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../utils/app_colors.dart';
-import '../../widgets/app_constants.dart';
+import '../../utils/app_constants.dart';
 
 class NavigationBuilder extends StatelessWidget {
   final int currentIndex;

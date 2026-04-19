@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../utils/app_colors.dart';
+import '../../utils/app_constants.dart';
 import '../../utils/app_styles.dart';
-import '../../widgets/app_constants.dart';
 import 'build_elevated_button.dart';
 import 'navigation_builder.dart';
 import 'pageview_builder.dart';
@@ -88,15 +88,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       currentIndex: _currentIndex,
                       imageController: _imageController,
                     ),
-                    if (_currentIndex ==
-                        AppConstants.pages.length - 1) ...[
+                    if (_currentIndex == AppConstants.pages.length - 1) ...[
                       const SizedBox(height: 8),
                       const Text(
                         "ابدأ الآن",
                         style: AppStyles.blue26regular,
                       ),
+                    ] else ...[
+                      const SizedBox(height: 8),
+                      Text("ابدأ الآن",
+                          style: AppStyles.blue26regular
+                              .copyWith(color: AppColors.babyBlue)),
                     ],
-                    const SizedBox(height: 20,)
+                    const SizedBox(
+                      height: 20,
+                    )
                   ],
                 ),
               ),

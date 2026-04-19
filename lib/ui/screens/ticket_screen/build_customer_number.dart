@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-
 import '../../utils/app_styles.dart';
 
 class BuildCustomerNumber extends StatelessWidget {
-  const BuildCustomerNumber({super.key});
+  final String ticketNo;
+
+  const BuildCustomerNumber({super.key, required this.ticketNo});
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +14,9 @@ class BuildCustomerNumber extends StatelessWidget {
         color: const Color(0xffbbdefb),
         borderRadius: BorderRadius.circular(18),
       ),
-      child: const Column(
+      child: Column(
         children: [
-          Text.rich(
+          const Text.rich(
             TextSpan(
               text: "رقمك",
               style: AppStyles.blue26regular,
@@ -27,9 +28,9 @@ class BuildCustomerNumber extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text(
-            "125",
+            ticketNo,
             style: AppStyles.blue26regular,
           ),
         ],
