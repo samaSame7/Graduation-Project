@@ -1,5 +1,5 @@
-import '../utils/app_assets.dart';
-import 'faq_dm.dart';
+import 'app_assets.dart';
+import '../widgets/faq_dm.dart';
 
 abstract final class AppConstants {
   static final List<FaqDm> faqItems = [
