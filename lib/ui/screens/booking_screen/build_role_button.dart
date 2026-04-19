@@ -31,7 +31,7 @@ class BuildRoleButton extends StatelessWidget {
             boxShadow: [
               if (isSelected)
                 BoxShadow(
-                  color: AppColors.darkBlue.withOpacity(0.12),
+                  color: AppColors.darkBlue.withAlpha(30),
                   blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),

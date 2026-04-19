@@ -1,4 +1,4 @@
-import 'app_assets.dart';
+import '../utils/app_assets.dart';
 
 abstract final class AppConstants {
   static final List<Map<String, String>> pages = [

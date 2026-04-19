@@ -23,6 +23,7 @@ class _BookingScreenState extends State<BookingScreen> {
     "استخراج شهادة",
     "توثيق ورقي",
     "استعلام",
+    "أخرى",
   ];
 
   void _changeRole(String newRole) {

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+
 import '../../utils/app_colors.dart';
 import '../../utils/app_styles.dart';
-import '../../widgets/app_constants.dart';
 import '../../widgets/build_search_widget.dart';
 import '../../widgets/build_service_message.dart';
+import '../../widgets/faq_dm.dart';
+import '../../../data/service_requirements_api_service.dart';
 
 class ServiceRequirementScreen extends StatefulWidget {
   const ServiceRequirementScreen({super.key});
@@ -14,26 +16,39 @@ class ServiceRequirementScreen extends StatefulWidget {
       _ServiceRequirementScreenState();
 }
 
-class _ServiceRequirementScreenState extends State<ServiceRequirementScreen> {
+class _ServiceRequirementScreenState
+    extends State<ServiceRequirementScreen> {
   int? _openId;
   String _search = "";
 
+  final ServiceRequirementsApiService _api =
+      ServiceRequirementsApiService();
+
+  late Future<List<FaqDm>> _future;
+
+  @override
+  void initState() {
+    super.initState();
+    _future = _api.fetchServiceRequirements();
+  }
+
+  void _reload() {
+    setState(() {
+      _openId = null;
+      _future = _api.fetchServiceRequirements();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final filtered = AppConstants.SRtems.where(
-            (e) => e.title.contains(_search) || e.content.contains(_search))
-        .toList();
-
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: AppColors.babyBlue,
-          body: Padding(
+      child: Scaffold(
+        backgroundColor: AppColors.babyBlue,
+        body: SafeArea(
+          child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Align(
                   alignment: AlignmentDirectional.topStart,
@@ -41,7 +56,6 @@ class _ServiceRequirementScreenState extends State<ServiceRequirementScreen> {
                     onPressed: () => Navigator.of(context).maybePop(),
                     icon: const Icon(
                       Icons.east_rounded,
-                      size: 24,
                       color: AppColors.darkBlue,
                     ),
                   ),
@@ -54,7 +68,6 @@ class _ServiceRequirementScreenState extends State<ServiceRequirementScreen> {
                         style: AppStyles.blue26regular,
                       ),
                     ),
-                    const SizedBox(width: 12),
                     BuildSearchWidget(
                       onChanged: (value) {
                         setState(() {
@@ -66,19 +79,49 @@ class _ServiceRequirementScreenState extends State<ServiceRequirementScreen> {
                 ),
                 const SizedBox(height: 18),
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: filtered.length,
-                    itemBuilder: (context, index) {
-                      final item = filtered[index];
-                      final bool isOpen = _openId == item.id;
+                  child: FutureBuilder<List<FaqDm>>(
+                    future: _future,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return const Center(
+                            child: CircularProgressIndicator());
+                      }
 
-                      return BuildServiceWidget(
-                        item: item,
-                        isOpen: isOpen,
-                        onExpansionChanged: (isExpanded) {
-                          setState(() {
-                            _openId = isExpanded ? item.id : null;
-                          });
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: ElevatedButton(
+                            onPressed: _reload,
+                            child: const Text("إعادة المحاولة"),
+                          ),
+                        );
+                      }
+
+                      final allItems = snapshot.data ?? [];
+                      final items = _search.isEmpty
+                          ? allItems
+                          : allItems
+                              .where((e) =>
+                                  e.title.contains(_search) ||
+                                  e.content.contains(_search))
+                              .toList();
+
+                      return ListView.builder(
+                        itemCount: items.length,
+                        itemBuilder: (context, index) {
+                          final item = items[index];
+                          final isOpen = _openId == item.id;
+
+                          return BuildServiceWidget(
+                            item: item,
+                            isOpen: isOpen,
+                            onExpansionChanged: (expanded) {
+                              setState(() {
+                                _openId =
+                                    expanded ? item.id : null;
+                              });
+                            },
+                          );
                         },
                       );
                     },

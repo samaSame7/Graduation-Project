@@ -24,7 +24,7 @@ class NavigationBuilder extends StatelessWidget {
           decoration: BoxDecoration(
             color: currentIndex == index
                 ? AppColors.blue
-                : AppColors.darkBlue.withOpacity(0.3),
+                : AppColors.darkBlue.withAlpha(75),
             borderRadius: BorderRadius.circular(20),
           ),
         ),

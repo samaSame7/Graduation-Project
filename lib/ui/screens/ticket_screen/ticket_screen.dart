@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/ui/screens/main_screen/main_screen.dart';
-import 'package:flutter_application_1/ui/screens/thanks_screen/thanks_screen.dart';
+import 'package:graduation_project/ui/screens/main_screen/main_screen.dart';
+import 'package:graduation_project/ui/screens/thanks_screen/thanks_screen.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_styles.dart';
 import '../../widgets/app_button.dart';
@@ -41,14 +41,18 @@ class TicketScreen extends StatelessWidget {
               BuildCustomerStatus(decoration: decoration),
               const Spacer(),
               AppButton(
-                onPress: () {Navigator.pushNamed(context, ThanksScreen.routeName);},
+                onPress: () {
+                  Navigator.pushNamed(context, ThanksScreen.routeName);
+                },
                 text: 'إنهاء',
                 bkColor: AppColors.blue,
                 foreColor: AppColors.white,
               ),
               const SizedBox(height: 10),
               AppButton(
-                onPress: () {Navigator.pushNamed(context, MainScreen.routeName);},
+                onPress: () {
+                  Navigator.pushNamed(context, MainScreen.routeName);
+                },
                 text: 'الغاء التذكرة',
                 bkColor: AppColors.gray,
                 foreColor: AppColors.darkBlue,

@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
 import '../core/config/app_config.dart';
 import '../ui/widgets/faq_dm.dart';
 
@@ -8,7 +7,6 @@ class FaqApiService {
   final String baseUrl;
   final http.Client _client;
 
-  /// لو عندك Bearer token:
   final Future<String?> Function()? tokenProvider;
 
   FaqApiService({
@@ -68,7 +66,7 @@ class FaqApiService {
     final content = (json['answer'] ?? '').toString();
 
     return FaqDm(
-      id: idStr.hashCode, // تحويل ثابت من String -> int
+      id: idStr.hashCode,
       title: title,
       content: content,
     );

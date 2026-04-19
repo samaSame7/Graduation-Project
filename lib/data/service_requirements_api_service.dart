@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
 import '../core/config/app_config.dart';
 import '../ui/widgets/faq_dm.dart';
 
@@ -8,7 +7,6 @@ class ServiceRequirementsApiService {
   final String baseUrl;
   final http.Client _client;
 
-  /// لو عندك Bearer token:
   final Future<String?> Function()? tokenProvider;
 
   ServiceRequirementsApiService({
@@ -18,9 +16,6 @@ class ServiceRequirementsApiService {
   })  : baseUrl = baseUrl ?? AppConfig.adminBaseUrl,
         _client = client ?? http.Client();
 
-  /// بيرجع List<FaqDm> عشان BuildServiceWidget شغال عليه:
-  /// title = service.name
-  /// content = requirements كنقط
   Future<List<FaqDm>> fetchServiceRequirements() async {
     final uri = Uri.parse('$baseUrl/services');
 
