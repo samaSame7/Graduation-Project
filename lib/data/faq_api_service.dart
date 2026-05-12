@@ -13,7 +13,7 @@ class FaqApiService {
     String? baseUrl,
     http.Client? client,
     this.tokenProvider,
-  })  : baseUrl = baseUrl ?? AppConfig.adminBaseUrl,
+  })  : baseUrl = baseUrl ?? AppConfig.publicApiBaseUrl,
         _client = client ?? http.Client();
 
   Future<List<FaqDm>> fetchFaqs({

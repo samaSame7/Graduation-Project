@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../data/models/service_item.dart';
+import '../../../data/services_api_service.dart';
+import '../../../data/ticket_api_service.dart';
 import '../../utils/app_assets.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_styles.dart';
@@ -18,13 +21,33 @@ class BookingScreen extends StatefulWidget {
 class _BookingScreenState extends State<BookingScreen> {
   String selectedRole = "طالب";
   String? selectedService;
+  bool _isLoadingServices = true;
+  bool _isCreatingTicket = false;
 
-  final List<String> services = [
-    "استخراج شهادة",
-    "توثيق ورقي",
-    "استعلام",
-    "أخرى",
-  ];
+  List<ServiceItem> _services = const [];
+  final ServicesApiService _servicesApi = ServicesApiService();
+  final TicketApiService _ticketApi = TicketApiService();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadServices();
+  }
+
+  Future<void> _loadServices() async {
+    setState(() => _isLoadingServices = true);
+    try {
+      final data = await _servicesApi.fetchServices();
+      if (!mounted) return;
+      setState(() {
+        _services = data;
+        _isLoadingServices = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _isLoadingServices = false);
+    }
+  }
 
   void _changeRole(String newRole) {
     setState(() {
@@ -32,8 +55,21 @@ class _BookingScreenState extends State<BookingScreen> {
     });
   }
 
+  String _mapRoleToPersonType(String role) {
+    switch (role) {
+      case "طالب":
+        return 'student';
+      case "ولي أمر":
+        return 'parent';
+      default:
+        return 'graduate';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final serviceNames = _services.map((e) => e.name).toList(growable: false);
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -95,15 +131,21 @@ class _BookingScreenState extends State<BookingScreen> {
                   style: AppStyles.blue26regular,
                 ),
                 const SizedBox(height: 8),
-                BuildDropdownButton(
-                  items: services,
-                  selectedService: selectedService,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedService = newValue;
-                    });
-                  },
-                ),
+                if (_isLoadingServices)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    child: Center(child: CircularProgressIndicator()),
+                  )
+                else
+                  BuildDropdownButton(
+                    items: serviceNames,
+                    selectedService: selectedService,
+                    onChanged: (newValue) {
+                      setState(() {
+                        selectedService = newValue;
+                      });
+                    },
+                  ),
                 const SizedBox(height: 40),
                 Expanded(
                   child: Image.asset(
@@ -113,7 +155,9 @@ class _BookingScreenState extends State<BookingScreen> {
                 ),
                 const SizedBox(height: 20),
                 AppButton(
-                  onPress: () {
+                  onPress: () async {
+                    if (_isLoadingServices || _isCreatingTicket) return;
+
                     if (selectedService == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -126,7 +170,34 @@ class _BookingScreenState extends State<BookingScreen> {
                       );
                       return;
                     }
-                    Navigator.pushNamed(context, TicketScreen.routeName);
+
+                    final selected = _services.where((e) => e.name == selectedService).toList();
+                    if (selected.isEmpty) return;
+
+                    setState(() => _isCreatingTicket = true);
+                    try {
+                      final created = await _ticketApi.createTicket(
+                        serviceId: selected.first.id,
+                        personType: _mapRoleToPersonType(selectedRole),
+                      );
+
+                      if (!context.mounted) return;
+                      Navigator.pushNamed(
+                        context,
+                        TicketScreen.routeName,
+                        arguments: created,
+                      );
+                    } catch (_) {
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('فشل في إنشاء التذكرة'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    } finally {
+                      if (mounted) setState(() => _isCreatingTicket = false);
+                    }
                   },
                   text: 'تأكيد الحجز',
                   foreColor: AppColors.white,

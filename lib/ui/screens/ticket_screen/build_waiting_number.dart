@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 import '../../utils/app_colors.dart';
 
 class BuildWaitingNumber extends StatelessWidget {
-  const BuildWaitingNumber({super.key, required this.decoration});
+  const BuildWaitingNumber({
+    super.key,
+    required this.decoration,
+    required this.remaining,
+  });
   final BoxDecoration decoration;
+  final int remaining;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +20,7 @@ class BuildWaitingNumber extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            "18",
+            "$remaining",
             style: TextStyle(
               color: AppColors.darkBlue,
               fontSize: 20,

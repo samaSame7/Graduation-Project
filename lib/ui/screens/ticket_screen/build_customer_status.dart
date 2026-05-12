@@ -3,8 +3,14 @@ import '../../utils/app_colors.dart';
 import '../../utils/app_styles.dart';
 
 class BuildCustomerStatus extends StatelessWidget {
-  const BuildCustomerStatus({super.key, required this.decoration});
+  const BuildCustomerStatus({
+    super.key,
+    required this.decoration,
+    required this.statusLabel,
+  });
+
   final BoxDecoration decoration;
+  final String statusLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +26,7 @@ class BuildCustomerStatus extends StatelessWidget {
               color: AppColors.gray,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Text(
-              "في الإنتظار",
-              style: AppStyles.blue16regular,
-            ),
+            child: Text(statusLabel, style: AppStyles.blue16regular),
           ),
           const Row(
             children: [

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../core/config/app_config.dart';
+import '../core/config/end_points.dart';
 import '../ui/widgets/faq_dm.dart';
 
 class ServiceRequirementsApiService {
@@ -13,11 +14,11 @@ class ServiceRequirementsApiService {
     String? baseUrl,
     http.Client? client,
     this.tokenProvider,
-  })  : baseUrl = baseUrl ?? AppConfig.adminBaseUrl,
+  })  : baseUrl = baseUrl ?? AppConfig.publicApiBaseUrl,
         _client = client ?? http.Client();
 
   Future<List<FaqDm>> fetchServiceRequirements() async {
-    final uri = Uri.parse('$baseUrl/services');
+    final uri = Uri.parse('$baseUrl${Endpoints.services}');
 
     final headers = <String, String>{
       'Accept': 'application/json',

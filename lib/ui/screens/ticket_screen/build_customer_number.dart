@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import '../../utils/app_styles.dart';
 
 class BuildCustomerNumber extends StatelessWidget {
-  const BuildCustomerNumber({super.key});
+  const BuildCustomerNumber({super.key, required this.ticketNo});
+  final String ticketNo;
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +29,7 @@ class BuildCustomerNumber extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10),
-          Text(
-            "125",
-            style: AppStyles.blue26regular,
-          ),
+          Text(ticketNo, style: AppStyles.blue26regular),
         ],
       ),
     );

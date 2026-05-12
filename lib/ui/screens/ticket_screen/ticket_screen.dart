@@ -1,4 +1,8 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:graduation_project/data/models/ticket_item.dart';
+import 'package:graduation_project/data/socket_service.dart';
+import 'package:graduation_project/data/ticket_api_service.dart';
 import 'package:graduation_project/ui/screens/main_screen/main_screen.dart';
 import 'package:graduation_project/ui/screens/thanks_screen/thanks_screen.dart';
 import '../../utils/app_colors.dart';
@@ -8,9 +12,115 @@ import 'build_customer_number.dart';
 import 'build_customer_status.dart';
 import 'build_waiting_number.dart';
 
-class TicketScreen extends StatelessWidget {
+class TicketScreen extends StatefulWidget {
   const TicketScreen({super.key});
-  static const String routeName = "thanks";
+  static const String routeName = "ticketScreen";
+
+  @override
+  State<TicketScreen> createState() => _TicketScreenState();
+}
+
+class _TicketScreenState extends State<TicketScreen> {
+  final TicketApiService _ticketApi = TicketApiService();
+  final SocketService _socketService = SocketService();
+
+  StreamSubscription<Map<String, dynamic>>? _ticketUpdatedSub;
+  StreamSubscription<Map<String, dynamic>>? _serviceStatsSub;
+
+  TicketItem? _ticket;
+  int _remaining = 0;
+  String _status = 'pending';
+
+  String _statusLabel(String status) {
+    switch (status) {
+      case 'in_progress':
+        return 'ﬁÌœ «· ‰›Ì–';
+      case 'finished':
+        return ' „ «·«‰ Â«¡';
+      case 'canceled':
+        return ' „ «·≈·€«¡';
+      case 'skipped':
+        return ' „ «· Ã«Ê“';
+      default:
+        return '›Ì «·«‰ Ÿ«—';
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_ticket != null) return;
+
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args is! TicketItem) return;
+
+    _ticket = args;
+    _status = args.status;
+
+    _socketService.connect();
+    _socketService.subscribe(serviceId: args.serviceId, ticketId: args.id);
+
+    _ticketUpdatedSub = _socketService.ticketUpdatedStream.listen((payload) {
+      if ((payload['ticketId'] ?? '').toString() != args.id) return;
+      if (!mounted) return;
+      setState(() {
+        _status = (payload['status'] ?? _status).toString();
+        final rem = payload['remaining'];
+        if (rem is num) _remaining = rem.toInt();
+      });
+    });
+
+    _serviceStatsSub = _socketService.serviceStatsStream.listen((payload) {
+      if ((payload['serviceId'] ?? '').toString() != args.serviceId) return;
+      final rem = payload['remaining'];
+      if (!mounted || rem is! num) return;
+      setState(() => _remaining = rem.toInt());
+    });
+
+    _loadRemaining();
+  }
+
+  Future<void> _loadRemaining() async {
+    final ticket = _ticket;
+    if (ticket == null) return;
+
+    try {
+      final remaining = await _ticketApi.getRemainingByTicketId(ticket.id);
+      if (!mounted) return;
+      setState(() => _remaining = remaining);
+    } catch (_) {}
+  }
+
+  Future<void> _cancelTicket() async {
+    final ticket = _ticket;
+    if (ticket == null) return;
+
+    try {
+      await _ticketApi.cancelTicket(ticket.id);
+      if (!mounted) return;
+      Navigator.pushNamed(context, MainScreen.routeName);
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('›‘· ›Ì ≈·€«¡ «· –ﬂ—…'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    final t = _ticket;
+    if (t != null) {
+      _socketService.unsubscribe(serviceId: t.serviceId, ticketId: t.id);
+    }
+    _ticketUpdatedSub?.cancel();
+    _serviceStatsSub?.cancel();
+    _socketService.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +128,14 @@ class TicketScreen extends StatelessWidget {
       color: AppColors.lightBlue,
       borderRadius: BorderRadius.circular(18),
     );
+
+    final ticket = _ticket;
+    if (ticket == null) {
+      return const Scaffold(
+        body: Center(child: Text('·«  ÊÃœ »Ì«‰«   –ﬂ—…')),
+      );
+    }
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.babyBlue,
@@ -34,11 +152,14 @@ class TicketScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 35),
-              const BuildCustomerNumber(),
+              BuildCustomerNumber(ticketNo: ticket.ticketNo),
               const SizedBox(height: 25),
-              BuildWaitingNumber(decoration: decoration),
+              BuildWaitingNumber(decoration: decoration, remaining: _remaining),
               const SizedBox(height: 20),
-              BuildCustomerStatus(decoration: decoration),
+              BuildCustomerStatus(
+                decoration: decoration,
+                statusLabel: _statusLabel(_status),
+              ),
               const Spacer(),
               AppButton(
                 onPress: () {
@@ -50,9 +171,7 @@ class TicketScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               AppButton(
-                onPress: () {
-                  Navigator.pushNamed(context, MainScreen.routeName);
-                },
+                onPress: _cancelTicket,
                 text: 'ÿßŸÑÿ∫ÿßÿ° ÿßŸÑÿ™ÿ∞ŸÉÿ±ÿ©',
                 bkColor: AppColors.gray,
                 foreColor: AppColors.darkBlue,
