@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../core/config/app_config.dart';
 import '../core/config/end_points.dart';
@@ -66,7 +66,7 @@ class ServiceRequirementsApiService {
 
     final content = requirements.isEmpty
         ? 'لا توجد متطلبات'
-        : requirements.map((e) => '• $e').join('\n');
+        : requirements.map((e) => '- $e').join('\n');
 
     return FaqDm(
       id: idStr.hashCode,

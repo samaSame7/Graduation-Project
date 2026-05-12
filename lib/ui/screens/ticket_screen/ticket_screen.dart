@@ -1,4 +1,4 @@
-import 'dart:async';
+ï»¿import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:graduation_project/data/models/ticket_item.dart';
 import 'package:graduation_project/data/socket_service.dart';
@@ -34,15 +34,15 @@ class _TicketScreenState extends State<TicketScreen> {
   String _statusLabel(String status) {
     switch (status) {
       case 'in_progress':
-        return 'ŞíÏ ÇáÊäİíĞ';
+        return 'Ù‚ÙŠØ¯ Ø§Ù„ØªÙ†ÙÙŠØ°';
       case 'finished':
-        return 'Êã ÇáÇäÊåÇÁ';
+        return 'ØªÙ… Ø§Ù„Ø§Ù†ØªÙ‡Ø§Ø¡';
       case 'canceled':
-        return 'Êã ÇáÅáÛÇÁ';
+        return 'ØªÙ… Ø§Ù„Ø¥Ù„ØºØ§Ø¡';
       case 'skipped':
-        return 'Êã ÇáÊÌÇæÒ';
+        return 'ØªÙ… Ø§Ù„ØªØ¬Ø§ÙˆØ²';
       default:
-        return 'İí ÇáÇäÊÙÇÑ';
+        return 'ÙÙŠ Ø§Ù„Ø§Ù†ØªØ¸Ø§Ø±';
     }
   }
 
@@ -103,7 +103,7 @@ class _TicketScreenState extends State<TicketScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('İÔá İí ÅáÛÇÁ ÇáÊĞßÑÉ'),
+          content: Text('ÙØ´Ù„ ÙÙŠ Ø¥Ù„ØºØ§Ø¡ Ø§Ù„ØªØ°ÙƒØ±Ø©'),
           backgroundColor: Colors.red,
         ),
       );
@@ -132,7 +132,7 @@ class _TicketScreenState extends State<TicketScreen> {
     final ticket = _ticket;
     if (ticket == null) {
       return const Scaffold(
-        body: Center(child: Text('áÇ ÊæÌÏ ÈíÇäÇÊ ÊĞßÑÉ')),
+        body: Center(child: Text('Ù„Ø§ ØªÙˆØ¬Ø¯ Ø¨ÙŠØ§Ù†Ø§Øª ØªØ°ÙƒØ±Ø©')),
       );
     }
 
@@ -147,7 +147,7 @@ class _TicketScreenState extends State<TicketScreen> {
             children: [
               const SizedBox(height: 25),
               const Text(
-                "Ø§Ù„ØªØ°ÙƒØ±Ø© Ø§Ù„Ø­Ø§Ù„ÙŠØ©",
+                'Ø§Ù„ØªØ°ÙƒØ±Ø© Ø§Ù„Ø­Ø§Ù„ÙŠØ©',
                 style: AppStyles.blue26regular,
                 textAlign: TextAlign.center,
               ),
@@ -172,7 +172,7 @@ class _TicketScreenState extends State<TicketScreen> {
               const SizedBox(height: 10),
               AppButton(
                 onPress: _cancelTicket,
-                text: 'Ø§Ù„ØºØ§Ø¡ Ø§Ù„ØªØ°ÙƒØ±Ø©',
+                text: 'Ø¥Ù„ØºØ§Ø¡ Ø§Ù„ØªØ°ÙƒØ±Ø©',
                 bkColor: AppColors.gray,
                 foreColor: AppColors.darkBlue,
               ),

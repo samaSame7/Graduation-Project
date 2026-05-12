@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import '../../utils/app_colors.dart';
 
@@ -16,18 +16,18 @@ class BuildWaitingNumber extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
       decoration: decoration,
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             "$remaining",
-            style: TextStyle(
+            style: const TextStyle(
               color: AppColors.darkBlue,
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
-          Row(
+          const Row(
             children: [
               Text.rich(
                 TextSpan(
